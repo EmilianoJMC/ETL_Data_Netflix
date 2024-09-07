@@ -105,7 +105,7 @@ WITH valores_unicos AS (
 
 SELECT ROW_NUMBER() OVER () AS id, genre FROM valores_unicos;
 
--- Trigger para comportamento da coluna production_countries,tabela raw_titles
+-- Trigger para comportamento da coluna production_countries, tabela raw_titles
 CREATE TRIGGER clean_production_countries_before_insert
 BEFORE INSERT ON raw_titles
 FOR EACH ROW
