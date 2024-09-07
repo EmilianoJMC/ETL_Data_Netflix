@@ -88,7 +88,7 @@ CREATE TABLE `raw_titles` (
 
 -- Alterações Executadas durante o Projeto
 
--- Problemas tamanho de caracteres no momento de subir as tabelas manualmente
+-- Problemas tamanho de caracteres, erros acorreram na inserção via Python
 ALTER TABLE raw_credits MODIFY COLUMN `character` VARCHAR(500);
 ALTER TABLE raw_credits MODIFY COLUMN `name` VARCHAR(500);
 ALTER TABLE raw_titles MODIFY COLUMN `title` VARCHAR(500);
