@@ -115,7 +115,7 @@ BEGIN
     SET NEW.production_countries = REPLACE(SUBSTRING_INDEX(REPLACE(REPLACE(REPLACE(NEW.production_countries, '[', ''), ']', ''), '''', ''), ',', 1), '''', '');
 END;
 
--- Trigger para comportamento da coluna genre,tabela raw_titles
+-- Trigger para comportamento da coluna genre, tabela raw_titles
 CREATE TRIGGER clean_genres_before_insert
 BEFORE INSERT ON raw_titles
 FOR EACH ROW
