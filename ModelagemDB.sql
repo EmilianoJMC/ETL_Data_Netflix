@@ -1,19 +1,5 @@
 
--- Tabelas Originadas de CSV 
-
--- Criar nova tabela Dimensão -> dim_genre_netflix
-
-CREATE TABLE dim_genre_netflix AS
-WITH valores_unicos AS (
-    SELECT DISTINCT MAIN_GENRE AS genre FROM best_movie_by_year_netflix
-    UNION
-    SELECT DISTINCT MAIN_GENRE AS genre FROM best_show_by_year_netflix
-    UNION
-    SELECT DISTINCT MAIN_GENRE AS genre FROM best_shows_netflix
-)
-
-SELECT ROW_NUMBER() OVER () AS id, genre FROM valores_unicos;
-
+-- Tabelas Originadas de CSV e inseridas previamente
 
 -- Tabela best_movie_by_year_netflix 
 
@@ -102,10 +88,22 @@ CREATE TABLE `raw_titles` (
 
 -- Alterações Executadas durante o Projeto
 
--- Problemas tamanho de caracteres
+-- Problemas tamanho de caracteres no momento de subir as tabelas manualmente
 ALTER TABLE raw_credits MODIFY COLUMN `character` VARCHAR(500);
 ALTER TABLE raw_credits MODIFY COLUMN `name` VARCHAR(500);
 ALTER TABLE raw_titles MODIFY COLUMN `title` VARCHAR(500);
+
+-- Criar nova tabela Dimensão -> dim_genre_netflix
+CREATE TABLE dim_genre_netflix AS
+WITH valores_unicos AS (
+    SELECT DISTINCT MAIN_GENRE AS genre FROM best_movie_by_year_netflix
+    UNION
+    SELECT DISTINCT MAIN_GENRE AS genre FROM best_show_by_year_netflix
+    UNION
+    SELECT DISTINCT MAIN_GENRE AS genre FROM best_shows_netflix
+)
+
+SELECT ROW_NUMBER() OVER () AS id, genre FROM valores_unicos;
 
 -- Trigger para comportamento da coluna production_countries,tabela raw_titles
 CREATE TRIGGER clean_production_countries_before_insert
