@@ -100,9 +100,25 @@ CREATE TABLE `raw_titles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Alterações Executados durante o Projeto
+-- Alterações Executadas durante o Projeto
 
 -- Problemas tamanho de caracteres
 ALTER TABLE raw_credits MODIFY COLUMN `character` VARCHAR(500);
 ALTER TABLE raw_credits MODIFY COLUMN `name` VARCHAR(500);
 ALTER TABLE raw_titles MODIFY COLUMN `title` VARCHAR(500);
+
+-- Trigger para comportamento da coluna production_countries,tabela raw_titles
+CREATE TRIGGER clean_production_countries_before_insert
+BEFORE INSERT ON raw_titles
+FOR EACH ROW
+BEGIN
+    SET NEW.production_countries = REPLACE(SUBSTRING_INDEX(REPLACE(REPLACE(REPLACE(NEW.production_countries, '[', ''), ']', ''), '''', ''), ',', 1), '''', '');
+END;
+
+-- Trigger para comportamento da coluna genre,tabela raw_titles
+CREATE TRIGGER clean_genres_before_insert
+BEFORE INSERT ON raw_titles
+FOR EACH ROW
+BEGIN
+    SET NEW.genres = REPLACE(SUBSTRING_INDEX(REPLACE(REPLACE(REPLACE(NEW.genres, '[', ''), ']', ''), '''', ''), ',', 1), '''', '');
+END;
