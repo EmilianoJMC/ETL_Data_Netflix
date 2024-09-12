@@ -2,7 +2,6 @@
 -- Tabelas Originadas de CSV e inseridas previamente
 
 -- Tabela best_movie_by_year_netflix 
-
 CREATE TABLE `best_movie_by_year_netflix` (
   `index` int DEFAULT NULL,
   `TITLE` varchar(50) DEFAULT NULL,
@@ -14,7 +13,6 @@ CREATE TABLE `best_movie_by_year_netflix` (
 
 
 -- Tabela best_movies_netflix 
-
 CREATE TABLE `best_movies_netflix` (
   `index` int DEFAULT NULL,
   `title` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
@@ -28,7 +26,6 @@ CREATE TABLE `best_movies_netflix` (
 
 
 -- Tabela best_show_by_year_netflix 
-
 CREATE TABLE `best_show_by_year_netflix` (
   `index` int DEFAULT NULL,
   `TITLE` varchar(50) DEFAULT NULL,
@@ -41,7 +38,6 @@ CREATE TABLE `best_show_by_year_netflix` (
 
 
 -- Tabela best_shows_netflix 
-
 CREATE TABLE `best_shows_netflix` (
   `index` int DEFAULT NULL,
   `TITLE` varchar(50) DEFAULT NULL,
@@ -56,7 +52,6 @@ CREATE TABLE `best_shows_netflix` (
 
 
 -- Tabela raw_credits 
-
 CREATE TABLE `raw_credits` (
   `index` int DEFAULT NULL,
   `person_id` int DEFAULT NULL,
@@ -68,7 +63,6 @@ CREATE TABLE `raw_credits` (
 
 
 --Tabela raw_titles 
-
 CREATE TABLE `raw_titles` (
   `index` int DEFAULT NULL,
   `id` varchar(50) DEFAULT NULL,
@@ -86,12 +80,51 @@ CREATE TABLE `raw_titles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Alterações Executadas durante o Projeto
+-- Alterações Executadas durante o Projeto --
 
 -- Problemas tamanho de caracteres, erros acorreram na inserção via Python
 ALTER TABLE raw_credits MODIFY COLUMN `character` VARCHAR(500);
 ALTER TABLE raw_credits MODIFY COLUMN `name` VARCHAR(500);
 ALTER TABLE raw_titles MODIFY COLUMN `title` VARCHAR(500);
+
+
+-- Transformar o ID Gênero das tabelas em Primary KEY
+ALTER TABLE dim_genre_netflix ADD PRIMARY KEY (genre);
+
+
+-- Transformar as colunas de Gêneros da cada tabela em FOREIGN KEY
+ALTER TABLE best_movie_by_year_netflix
+ADD CONSTRAINT fk_main_genre
+FOREIGN KEY (MAIN_GENRE)
+REFERENCES dim_genre_netflix(genre); 
+
+ALTER TABLE best_show_by_year_netflix
+ADD CONSTRAINT fk_main_genre_bsbyn
+FOREIGN KEY (MAIN_GENRE)
+REFERENCES dim_genre_netflix(genre);
+
+ALTER TABLE best_shows_netflix
+ADD CONSTRAINT fk_main_genre_bsn
+FOREIGN KEY (MAIN_GENRE)
+REFERENCES dim_genre_netflix(genre); 
+
+ALTER TABLE best_movies_netflix
+ADD CONSTRAINT fk_main_genre_bmn
+FOREIGN KEY (MAIN_GENRE)
+REFERENCES dim_genre_netflix(genre); 
+
+ALTER TABLE best_movies_netflix
+ADD CONSTRAINT fk_main_genre_bmn
+FOREIGN KEY (main_genre)
+REFERENCES dim_genre_netflix(genre); 
+
+
+-- Por boa prática, coluna ID estava com números aleatórios, setado sequencial a partir do 1
+SET @id_seq = 0; -- Setar Variável
+UPDATE dim_genre_netflix 
+SET ID = (@id_seq := @id_seq + 1)
+ORDER BY ID;
+
 
 -- Criar nova tabela Dimensão -> dim_genre_netflix
 CREATE TABLE dim_genre_netflix AS
@@ -101,9 +134,10 @@ WITH valores_unicos AS (
     SELECT DISTINCT MAIN_GENRE AS genre FROM best_show_by_year_netflix
     UNION
     SELECT DISTINCT MAIN_GENRE AS genre FROM best_shows_netflix
+    UNION 
+    SELECT DISTINCT main_genre as genre FROM best_movies_netflix
 )
 
-SELECT ROW_NUMBER() OVER () AS id, genre FROM valores_unicos;
 
 -- Trigger para comportamento da coluna production_countries, tabela raw_titles
 CREATE TRIGGER clean_production_countries_before_insert
@@ -112,6 +146,7 @@ FOR EACH ROW
 BEGIN
     SET NEW.production_countries = REPLACE(SUBSTRING_INDEX(REPLACE(REPLACE(REPLACE(NEW.production_countries, '[', ''), ']', ''), '''', ''), ',', 1), '''', '');
 END;
+
 
 -- Trigger para comportamento da coluna genre, tabela raw_titles
 CREATE TRIGGER clean_genres_before_insert
