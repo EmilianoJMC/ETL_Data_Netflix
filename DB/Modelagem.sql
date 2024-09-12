@@ -88,11 +88,37 @@ ALTER TABLE raw_credits MODIFY COLUMN `name` VARCHAR(500);
 ALTER TABLE raw_titles MODIFY COLUMN `title` VARCHAR(500);
 
 
+-- Criar nova tabela Dimensão -> dim_genre_netflix
+CREATE TABLE dim_genre_netflix AS
+WITH valores_unicos AS (
+    SELECT DISTINCT MAIN_GENRE AS genre FROM best_movie_by_year_netflix
+    UNION
+    SELECT DISTINCT MAIN_GENRE AS genre FROM best_show_by_year_netflix
+    UNION
+    SELECT DISTINCT MAIN_GENRE AS genre FROM best_shows_netflix
+    UNION 
+    SELECT DISTINCT main_genre as genre FROM best_movies_netflix
+)
+
+
+-- Criar nova tabela Dimensão -> dim_title_netflix
+CREATE TABLE dim_title_netflix AS
+WITH valores_unicos AS (
+    SELECT DISTINCT TITLE AS title FROM best_movie_by_year_netflix
+    UNION
+    SELECT DISTINCT TITLE AS title FROM best_show_by_year_netflix
+    UNION
+    SELECT DISTINCT TITLE AS title FROM best_shows_netflix
+    UNION 
+    SELECT DISTINCT title as title FROM best_movies_netflix
+)
+
+
 -- Transformar o ID Gênero das tabelas em Primary KEY
 ALTER TABLE dim_genre_netflix ADD PRIMARY KEY (genre);
 
 
--- Transformar as colunas de Gêneros da cada tabela em FOREIGN KEY
+-- Transformar as colunas de Gêneros da cada tabela em FOREIGN KEY, para a tabela Pai -> dim_genre_netflix
 ALTER TABLE best_movie_by_year_netflix
 ADD CONSTRAINT fk_main_genre
 FOREIGN KEY (MAIN_GENRE)
@@ -124,19 +150,6 @@ SET @id_seq = 0; -- Setar Variável
 UPDATE dim_genre_netflix 
 SET ID = (@id_seq := @id_seq + 1)
 ORDER BY ID;
-
-
--- Criar nova tabela Dimensão -> dim_genre_netflix
-CREATE TABLE dim_genre_netflix AS
-WITH valores_unicos AS (
-    SELECT DISTINCT MAIN_GENRE AS genre FROM best_movie_by_year_netflix
-    UNION
-    SELECT DISTINCT MAIN_GENRE AS genre FROM best_show_by_year_netflix
-    UNION
-    SELECT DISTINCT MAIN_GENRE AS genre FROM best_shows_netflix
-    UNION 
-    SELECT DISTINCT main_genre as genre FROM best_movies_netflix
-)
 
 
 -- Trigger para comportamento da coluna production_countries, tabela raw_titles
