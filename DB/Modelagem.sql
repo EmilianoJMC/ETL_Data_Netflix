@@ -80,7 +80,8 @@ CREATE TABLE `raw_titles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Alterações Executadas durante o Projeto --
+-- ALTERAÇÕES EXECUTADAS DURANTE O PROJETO --
+
 
 -- Problemas tamanho de caracteres, erros acorreram na inserção via Python
 ALTER TABLE raw_credits MODIFY COLUMN `character` VARCHAR(500);
