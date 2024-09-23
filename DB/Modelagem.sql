@@ -1,7 +1,7 @@
 
--- Tabelas Originadas de CSV e inseridas previamente
+-- Tabelas Originadas de CSV inseridas previamente e criadas para o Projeto
 
--- Tabela best_movie_by_year_netflix 
+-- Tabela best_movie_by_year_netflix -> CSV
 CREATE TABLE `best_movie_by_year_netflix` (
   `index` int DEFAULT NULL,
   `TITLE` varchar(50) DEFAULT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE `best_movie_by_year_netflix` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Tabela best_movies_netflix 
+-- Tabela best_movies_netflix -> CSV
 CREATE TABLE `best_movies_netflix` (
   `index` int DEFAULT NULL,
   `title` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `best_movies_netflix` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Tabela best_show_by_year_netflix 
+-- Tabela best_show_by_year_netflix -> CSV
 CREATE TABLE `best_show_by_year_netflix` (
   `index` int DEFAULT NULL,
   `TITLE` varchar(50) DEFAULT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE `best_show_by_year_netflix` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Tabela best_shows_netflix 
+-- Tabela best_shows_netflix -> CSV
 CREATE TABLE `best_shows_netflix` (
   `index` int DEFAULT NULL,
   `TITLE` varchar(50) DEFAULT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `best_shows_netflix` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- Tabela raw_credits 
+-- Tabela raw_credits -> CSV
 CREATE TABLE `raw_credits` (
   `index` int DEFAULT NULL,
   `person_id` int DEFAULT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `raw_credits` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
---Tabela raw_titles 
+--Tabela raw_titles -> CSV
 CREATE TABLE `raw_titles` (
   `index` int DEFAULT NULL,
   `id` varchar(50) DEFAULT NULL,
@@ -80,7 +80,15 @@ CREATE TABLE `raw_titles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- ALTERAÇÕES EXECUTADAS DURANTE O PROJETO --
+-- Tabela dim_genre_netflix criada a partir de Union para gerar Primary Key -> Criada para o Projeto
+CREATE TABLE `dim_genre_netflix` (
+  `id` bigint unsigned NOT NULL DEFAULT '0',
+  `genre` varchar(50) NOT NULL,
+  PRIMARY KEY (`genre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+---- ALTERAÇÕES EXECUTADAS DURANTE O PROJETO ----
 
 
 -- Problemas tamanho de caracteres, erros acorreram na inserção via Python
