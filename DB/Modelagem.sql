@@ -1,5 +1,5 @@
 
--- Tabelas Originadas de CSV inseridas previamente e criadas para o Projeto
+-- Tabelas Originadas de CSV inseridas previamente, com a adição de outras criadas para o Projeto
 
 -- Tabela best_movie_by_year_netflix -> CSV
 CREATE TABLE `best_movie_by_year_netflix` (
