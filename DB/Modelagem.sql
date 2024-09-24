@@ -8,7 +8,9 @@ CREATE TABLE `best_movie_by_year_netflix` (
   `RELEASE_YEAR` int DEFAULT NULL,
   `SCORE` double DEFAULT NULL,
   `MAIN_GENRE` varchar(50) DEFAULT NULL,
-  `MAIN_PRODUCTION` varchar(50) DEFAULT NULL
+  `MAIN_PRODUCTION` varchar(50) DEFAULT NULL,
+  KEY `fk_main_genre` (`MAIN_GENRE`),
+  CONSTRAINT `fk_main_genre` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -21,7 +23,9 @@ CREATE TABLE `best_movies_netflix` (
   `number_of_votes` int DEFAULT NULL,
   `duration` int DEFAULT NULL,
   `main_genre` varchar(50) DEFAULT NULL,
-  `main_production` varchar(50) DEFAULT NULL
+  `main_production` varchar(50) DEFAULT NULL,
+  KEY `fk_main_genre_bmn` (`main_genre`),
+  CONSTRAINT `fk_main_genre_bmn` FOREIGN KEY (`main_genre`) REFERENCES `dim_genre_netflix` (`genre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -33,7 +37,9 @@ CREATE TABLE `best_show_by_year_netflix` (
   `SCORE` double DEFAULT NULL,
   `NUMBER_OF_SEASONS` int DEFAULT NULL,
   `MAIN_GENRE` varchar(50) DEFAULT NULL,
-  `MAIN_PRODUCTION` varchar(50) DEFAULT NULL
+  `MAIN_PRODUCTION` varchar(50) DEFAULT NULL,
+  KEY `fk_main_genre_bsbyn` (`MAIN_GENRE`),
+  CONSTRAINT `fk_main_genre_bsbyn` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -47,7 +53,9 @@ CREATE TABLE `best_shows_netflix` (
   `DURATION` int DEFAULT NULL,
   `NUMBER_OF_SEASONS` int DEFAULT NULL,
   `MAIN_GENRE` varchar(50) DEFAULT NULL,
-  `MAIN_PRODUCTION` varchar(50) DEFAULT NULL
+  `MAIN_PRODUCTION` varchar(50) DEFAULT NULL,
+  KEY `fk_main_genre_bsn` (`MAIN_GENRE`),
+  CONSTRAINT `fk_main_genre_bsn` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -88,6 +96,7 @@ CREATE TABLE `dim_genre_netflix` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+
 ---- ALTERAÇÕES EXECUTADAS DURANTE O PROJETO ----
 
 
@@ -107,19 +116,6 @@ WITH valores_unicos AS (
     SELECT DISTINCT MAIN_GENRE AS genre FROM best_shows_netflix
     UNION 
     SELECT DISTINCT main_genre as genre FROM best_movies_netflix
-)
-
-
--- Criar nova tabela Dimensão -> dim_title_netflix
-CREATE TABLE dim_title_netflix AS
-WITH valores_unicos AS (
-    SELECT DISTINCT TITLE AS title FROM best_movie_by_year_netflix
-    UNION
-    SELECT DISTINCT TITLE AS title FROM best_show_by_year_netflix
-    UNION
-    SELECT DISTINCT TITLE AS title FROM best_shows_netflix
-    UNION 
-    SELECT DISTINCT title as title FROM best_movies_netflix
 )
 
 
