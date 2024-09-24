@@ -100,7 +100,7 @@ CREATE TABLE `dim_genre_netflix` (
 ---- ALTERAÇÕES EXECUTADAS DURANTE O PROJETO ----
 
 
--- Problemas tamanho de caracteres, erros acorreram na inserção via Python
+-- Problemas tamanho de caracteres, erros ocorreram na inserção via Python
 ALTER TABLE raw_credits MODIFY COLUMN `character` VARCHAR(500);
 ALTER TABLE raw_credits MODIFY COLUMN `name` VARCHAR(500);
 ALTER TABLE raw_titles MODIFY COLUMN `title` VARCHAR(500);
@@ -150,7 +150,7 @@ FOREIGN KEY (main_genre)
 REFERENCES dim_genre_netflix(genre); 
 
 
--- Por boa prática, coluna ID estava com números aleatórios, setado sequencial a partir do 1
+-- Por boa prática, coluna ID estava com números aleatórios, setado sequêncial a partir do 1
 SET @id_seq = 0; -- Setar Variável
 UPDATE dim_genre_netflix 
 SET ID = (@id_seq := @id_seq + 1)
