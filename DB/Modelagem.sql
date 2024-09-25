@@ -116,6 +116,8 @@ WITH valores_unicos AS (
     SELECT DISTINCT MAIN_GENRE AS genre FROM best_shows_netflix
     UNION 
     SELECT DISTINCT main_genre as genre FROM best_movies_netflix
+    UNION
+    SELECT DISTINCT genres as genre FROM raw_titles
 )
 SELECT ROW_NUMBER() OVER () AS id, genre FROM valores_unicos;
 
@@ -167,10 +169,32 @@ ADD CONSTRAINT fk_main_genre_bmn
 FOREIGN KEY (MAIN_GENRE)
 REFERENCES dim_genre_netflix(genre); 
 
+
+-- Transformar as colunas de Títulos da cada tabela em FOREIGN KEY, para a tabela Pai -> dim_title_netflix
+ALTER TABLE best_movie_by_year_netflix
+ADD CONSTRAINT fk_title_genre_bmbyn
+FOREIGN KEY (TITLE)
+REFERENCES dim_title_netflix(title); 
+
 ALTER TABLE best_movies_netflix
-ADD CONSTRAINT fk_main_genre_bmn
-FOREIGN KEY (main_genre)
-REFERENCES dim_genre_netflix(genre); 
+ADD CONSTRAINT fk_title_genre_bmn
+FOREIGN KEY (title)
+REFERENCES dim_title_netflix(title); 
+
+ALTER TABLE best_show_by_year_netflix
+ADD CONSTRAINT fk_title_genre_bsbyn
+FOREIGN KEY (TITLE)
+REFERENCES dim_title_netflix(title); 
+
+ALTER TABLE best_shows_netflix
+ADD CONSTRAINT fk_title_genre_bsn
+FOREIGN KEY (TITLE)
+REFERENCES dim_title_netflix(title); 
+
+ALTER TABLE raw_titles
+ADD CONSTRAINT fk_title_genre_rt
+FOREIGN KEY (title)
+REFERENCES dim_title_netflix(title); 
 
 
 -- Por boa prática, coluna ID estava com números aleatórios, setado sequêncial a partir do 1
