@@ -133,12 +133,17 @@ WITH valores_unicos AS (
     UNION
     SELECT DISTINCT title AS title FROM raw_titles
 )
-
 SELECT ROW_NUMBER() OVER () AS id, title FROM valores_unicos;
 
 
--- Transformar o ID Gênero das tabelas em Primary KEY
+-- Transformar o ID Gênero da tabela dim_genre_netflix em Primary KEY
 ALTER TABLE dim_genre_netflix ADD PRIMARY KEY (genre);
+
+-- Transformar o ID Título da tabela dim_title_netflix em Primary KEY
+ALTER TABLE dim_title_netflix ADD PRIMARY KEY (title);
+
+-- ID 2064 nulo, deletado para criar Primary Key da nova tabela dim_title_netflix
+DELETE FROM dim_title_netflix WHERE title IS NULL;
 
 
 -- Transformar as colunas de Gêneros da cada tabela em FOREIGN KEY, para a tabela Pai -> dim_genre_netflix
