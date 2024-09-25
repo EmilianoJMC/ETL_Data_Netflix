@@ -117,6 +117,24 @@ WITH valores_unicos AS (
     UNION 
     SELECT DISTINCT main_genre as genre FROM best_movies_netflix
 )
+SELECT ROW_NUMBER() OVER () AS id, genre FROM valores_unicos;
+
+
+-- Criar nova tabela Dimensão -> dim_title_netflix
+CREATE TABLE dim_title_netflix AS
+WITH valores_unicos AS (
+    SELECT DISTINCT TITLE AS title FROM best_movie_by_year_netflix
+    UNION
+    SELECT DISTINCT TITLE AS title FROM best_show_by_year_netflix
+    UNION
+    SELECT DISTINCT TITLE AS title FROM best_shows_netflix
+    UNION
+    SELECT DISTINCT title AS title FROM best_movies_netflix
+    UNION
+    SELECT DISTINCT title AS title FROM raw_titles
+)
+
+SELECT ROW_NUMBER() OVER () AS id, title FROM valores_unicos;
 
 
 -- Transformar o ID Gênero das tabelas em Primary KEY
