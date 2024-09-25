@@ -10,7 +10,9 @@ CREATE TABLE `best_movie_by_year_netflix` (
   `MAIN_GENRE` varchar(50) DEFAULT NULL,
   `MAIN_PRODUCTION` varchar(50) DEFAULT NULL,
   KEY `fk_main_genre` (`MAIN_GENRE`),
-  CONSTRAINT `fk_main_genre` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`)
+  KEY `fk_title_genre_bmbyn` (`TITLE`),
+  CONSTRAINT `fk_main_genre` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`),
+  CONSTRAINT `fk_title_genre_bmbyn` FOREIGN KEY (`TITLE`) REFERENCES `dim_title_netflix` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -25,7 +27,9 @@ CREATE TABLE `best_movies_netflix` (
   `main_genre` varchar(50) DEFAULT NULL,
   `main_production` varchar(50) DEFAULT NULL,
   KEY `fk_main_genre_bmn` (`main_genre`),
-  CONSTRAINT `fk_main_genre_bmn` FOREIGN KEY (`main_genre`) REFERENCES `dim_genre_netflix` (`genre`)
+  KEY `fk_title_genre_bmn` (`title`),
+  CONSTRAINT `fk_main_genre_bmn` FOREIGN KEY (`main_genre`) REFERENCES `dim_genre_netflix` (`genre`),
+  CONSTRAINT `fk_title_genre_bmn` FOREIGN KEY (`title`) REFERENCES `dim_title_netflix` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -39,7 +43,9 @@ CREATE TABLE `best_show_by_year_netflix` (
   `MAIN_GENRE` varchar(50) DEFAULT NULL,
   `MAIN_PRODUCTION` varchar(50) DEFAULT NULL,
   KEY `fk_main_genre_bsbyn` (`MAIN_GENRE`),
-  CONSTRAINT `fk_main_genre_bsbyn` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`)
+  KEY `fk_title_genre_bsbyn` (`TITLE`),
+  CONSTRAINT `fk_main_genre_bsbyn` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`),
+  CONSTRAINT `fk_title_genre_bsbyn` FOREIGN KEY (`TITLE`) REFERENCES `dim_title_netflix` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -55,18 +61,9 @@ CREATE TABLE `best_shows_netflix` (
   `MAIN_GENRE` varchar(50) DEFAULT NULL,
   `MAIN_PRODUCTION` varchar(50) DEFAULT NULL,
   KEY `fk_main_genre_bsn` (`MAIN_GENRE`),
-  CONSTRAINT `fk_main_genre_bsn` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- Tabela raw_credits -> CSV
-CREATE TABLE `raw_credits` (
-  `index` int DEFAULT NULL,
-  `person_id` int DEFAULT NULL,
-  `id` varchar(50) DEFAULT NULL,
-  `name` varchar(500) DEFAULT NULL,
-  `character` varchar(500) DEFAULT NULL,
-  `role` varchar(50) DEFAULT NULL
+  KEY `fk_title_genre_bsn` (`TITLE`),
+  CONSTRAINT `fk_main_genre_bsn` FOREIGN KEY (`MAIN_GENRE`) REFERENCES `dim_genre_netflix` (`genre`),
+  CONSTRAINT `fk_title_genre_bsn` FOREIGN KEY (`TITLE`) REFERENCES `dim_title_netflix` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -84,7 +81,20 @@ CREATE TABLE `raw_titles` (
   `seasons` double DEFAULT NULL,
   `imdb_id` varchar(50) DEFAULT NULL,
   `imdb_score` double DEFAULT NULL,
-  `imdb_votes` double DEFAULT NULL
+  `imdb_votes` double DEFAULT NULL,
+  KEY `fk_title_genre_rt` (`title`),
+  CONSTRAINT `fk_title_genre_rt` FOREIGN KEY (`title`) REFERENCES `dim_title_netflix` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- Tabela raw_credits -> CSV
+CREATE TABLE `raw_credits` (
+  `index` int DEFAULT NULL,
+  `person_id` int DEFAULT NULL,
+  `id` varchar(50) DEFAULT NULL,
+  `name` varchar(500) DEFAULT NULL,
+  `character` varchar(500) DEFAULT NULL,
+  `role` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -93,6 +103,14 @@ CREATE TABLE `dim_genre_netflix` (
   `id` bigint unsigned NOT NULL DEFAULT '0',
   `genre` varchar(50) NOT NULL,
   PRIMARY KEY (`genre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- Tabela dim_title_netflix criada a partir de Union para gerar Primary Key -> Criada para o Projeto
+CREATE TABLE `dim_title_netflix` (
+  `id` bigint unsigned NOT NULL DEFAULT '0',
+  `title` varchar(500) NOT NULL,
+  PRIMARY KEY (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
