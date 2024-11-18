@@ -309,4 +309,126 @@ GROUP BY
     c.name, c.character, c.role
 ORDER BY
     total_appearances DESC;
-   
+
+
+-- View Gêneros Populares por Ano
+CREATE VIEW vw_genre_popularity_by_year AS
+SELECT
+    t.release_year,
+    g.genre,
+    COUNT(t.title) AS total_titles,
+    AVG(t.score) AS avg_score,
+    SUM(t.number_of_votes) AS total_votes
+FROM (
+    SELECT title, release_year, main_genre, score, number_of_votes FROM best_movies_netflix
+    UNION ALL
+    SELECT title, release_year, main_genre, score, number_of_votes FROM best_shows_netflix
+) t
+LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
+GROUP BY t.release_year, g.genre
+ORDER BY t.release_year, total_votes DESC;
+
+
+-- View Top 10 Títulos por Pontuação
+CREATE VIEW vw_top_10_titles AS
+SELECT
+    title,
+    type,
+    release_year,
+    score,
+    number_of_votes,
+    genre
+FROM (
+    SELECT
+        t.title,
+        'Movie' AS type,
+        t.release_year,
+        t.score,
+        t.number_of_votes,
+        g.genre
+    FROM best_movies_netflix t
+    LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
+    UNION ALL
+    SELECT
+        t.title,
+        'Show' AS type,
+        t.release_year,
+        t.score,
+        t.number_of_votes,
+        g.genre
+    FROM best_shows_netflix t
+    LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
+) combined
+ORDER BY score DESC
+LIMIT 10;
+
+
+-- View Distribuição de Duração por Gênero
+CREATE VIEW vw_duration_by_genre AS
+SELECT
+    g.genre,
+    AVG(t.duration) AS avg_duration,
+    MAX(t.duration) AS max_duration,
+    MIN(t.duration) AS min_duration,
+    COUNT(t.title) AS total_titles
+FROM (
+    SELECT title, main_genre, duration FROM best_movies_netflix
+    UNION ALL
+    SELECT title, main_genre, duration FROM best_shows_netflix
+) t
+LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
+GROUP BY g.genre
+ORDER BY avg_duration DESC;
+
+
+-- View Tendências de Lançamentos ao Longo do Tempo
+CREATE VIEW vw_trends_over_time AS
+SELECT
+    release_year,
+    type,
+    COUNT(title) AS total_titles
+FROM (
+    SELECT title, release_year, 'Movie' AS type FROM best_movies_netflix
+    UNION ALL
+    SELECT title, release_year, 'Show' AS type FROM best_shows_netflix
+) t
+GROUP BY release_year, type
+ORDER BY release_year, total_titles DESC;
+
+
+-- View Comparação de Pontuação e Votos
+CREATE VIEW vw_score_votes_analysis AS
+SELECT
+    title,
+    type,
+    score,
+    number_of_votes,
+    genre,
+    release_year,
+    CASE
+        WHEN score >= 8.0 AND number_of_votes < 500 THEN 'Hidden Gem'
+        WHEN score < 5.0 AND number_of_votes > 1000 THEN 'Overrated'
+        ELSE 'Normal'
+    END AS category
+FROM (
+    SELECT
+        t.title,
+        'Movie' AS type,
+        t.release_year,
+        t.score,
+        t.number_of_votes,
+        g.genre
+    FROM best_movies_netflix t
+    LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
+    UNION ALL
+    SELECT
+        t.title,
+        'Show' AS type,
+        t.release_year,
+        t.score,
+        t.number_of_votes,
+        g.genre
+    FROM best_shows_netflix t
+    LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
+) combined
+ORDER BY score DESC, number_of_votes DESC;
