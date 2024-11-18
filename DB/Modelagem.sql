@@ -432,3 +432,14 @@ FROM (
     LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
 ) combined
 ORDER BY score DESC, number_of_votes DESC;
+
+
+-- View para Big Numbers
+CREATE VIEW vw_big_numbers AS
+SELECT
+    (SELECT COUNT(*) FROM best_movies_netflix) AS total_movies,
+    (SELECT COUNT(*) FROM best_shows_netflix) AS total_shows,
+    (SELECT COUNT(DISTINCT release_year) FROM raw_titles) AS total_years,
+    (SELECT AVG(imdb_score) FROM raw_titles) AS avg_score,
+    (SELECT COUNT(DISTINCT production_countries) FROM raw_titles) AS total_countries,
+    (SELECT COUNT(DISTINCT name) FROM raw_credits) AS total_actors
