@@ -238,3 +238,75 @@ FOR EACH ROW
 BEGIN
     SET NEW.genres = REPLACE(SUBSTRING_INDEX(REPLACE(REPLACE(REPLACE(NEW.genres, '[', ''), ']', ''), '''', ''), ',', 1), '''', '');
 END;
+
+
+-- View para Melhores Títulos por Gênero e Ano
+CREATE VIEW vw_best_titles_by_genre_year AS
+SELECT
+    t.title,
+    t.release_year,
+    g.genre,
+    t.score,
+    t.number_of_votes,
+    t.duration,
+    'Movie' AS type
+FROM
+    best_movies_netflix t
+    LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre
+UNION ALL
+SELECT
+    t.title,
+    t.release_year,
+    g.genre,
+    t.score,
+    t.number_of_votes,
+    t.duration,
+    'Show' AS type
+FROM
+    best_shows_netflix t
+    LEFT JOIN dim_genre_netflix g ON t.main_genre = g.genre;
+   
+   
+-- View de Produções por País
+CREATE VIEW vw_productions_by_country AS
+SELECT
+    t.production_countries AS country,
+    COUNT(DISTINCT t.title) AS total_titles,
+    AVG(t.imdb_score) AS avg_score,
+    AVG(t.imdb_votes) AS avg_votes
+FROM
+    raw_titles t
+GROUP BY
+    t.production_countries;   
+
+
+-- View Gêneros ao longo dos Anos
+CREATE VIEW vw_genre_trends AS
+SELECT
+    g.genre,
+    t.release_year,
+    COUNT(*) AS total_titles,
+    AVG(t.score) AS avg_score
+FROM
+    best_movies_netflix t
+    JOIN dim_genre_netflix g ON t.main_genre = g.genre
+GROUP BY
+    g.genre, t.release_year
+ORDER BY
+    t.release_year, total_titles DESC;
+
+
+-- View Participaçoes dos Atores e Personagens
+ CREATE VIEW vw_actor_roles AS
+SELECT
+    c.name AS actor,
+    c.character,
+    c.role,
+    COUNT(*) AS total_appearances
+FROM
+    raw_credits c
+GROUP BY
+    c.name, c.character, c.role
+ORDER BY
+    total_appearances DESC;
+   
