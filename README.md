@@ -88,7 +88,17 @@ Bibliotecas e Dependências
 5. Big Numbers
    - Destaques de métricas principais, como o total de títulos, maior pontuação e número médio de votos.
   
-### Licença
-Este projeto é disponibilizado sob a MIT License.
+### Dashboard (Em breve atualizações de novos insights e visuias)
+
+![image](https://github.com/user-attachments/assets/e668fae0-ca36-4b85-8c7e-02ea7f107ef5)
+
+![image](https://github.com/user-attachments/assets/386ba4af-273d-429f-a9ef-2181bdb8fc92)
+
+![image](https://github.com/user-attachments/assets/2931beac-56a0-45b2-b2ee-73c31e055da3)
+
+![image](https://github.com/user-attachments/assets/bc6946c7-7fa5-4981-b931-75e814e47965)
+  
+### Contribuições
 
 Se tiver dúvidas ou sugestões, sinta-se à vontade para abrir uma issue ou contribuir com melhorias no repositório! 🚀
+
