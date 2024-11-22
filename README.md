@@ -88,7 +88,7 @@ Bibliotecas e Dependências
 5. Big Numbers
    - Destaques de métricas principais, como o total de títulos, maior pontuação e número médio de votos.
   
-### Dashboard (Em breve atualizações de novos insights e visuias)
+### Dashboard (Em breve atualizações de insights e visuias)
 
 ![image](https://github.com/user-attachments/assets/e668fae0-ca36-4b85-8c7e-02ea7f107ef5)
 
