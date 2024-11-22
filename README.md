@@ -7,7 +7,7 @@ Este projeto é uma análise ponta a ponta de dados sobre produções disponíve
 1. Obtenção dos Dados
    
    - Fonte: Kaggle - Dataset sobre filmes e séries da Netflix.
-   - Ferramenta: Python foi utilizado para acessar a API do Kaggle, realizar o download automático dos arquivos e armazená-los localmente.
+   - Ferramenta: Python foi utilizado para acessar ai site do Kaggle, realizar o download automático dos arquivos e armazená-los localmente.
 
 2. Inserção dos Dados no Banco de Dados
 
